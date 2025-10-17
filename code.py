@@ -1,35 +1,39 @@
-class loan_cal:
-    def __init__(self, withdrawn_amount, apr):
-        self.money = withdrawn_amount
-        self.apr = apr
-    
-    def showDetails(self):
-        print(f"You have taken a loan of {self.money} dollars at {self.apr}% annual principal interest rate.")
-    
-    def loan_status(self):
-        payment = float(input("How much will you pay off each months, in dollars?\n"))
-        months = int(input("How many months you wanna see the result for?\n"))
 
-        monthly_rate = self.apr/100/12
+class LoanCalculator:
+    def __init__(self, principal, apr):
+        self.principal = principal  # Total amount borrowed
+        self.apr = apr              # Annual interest rate (%)
+        self.monthly_rate = apr / 100 / 12  # Derived value, can be reused
 
-        for i in range(months):
-            #calculate the interest to pay
-            interest_paid = self.money*monthly_rate
+    def show_details(self):
+        print(f"You have taken a loan of ${self.principal:.2f} at {self.apr}% annual interest rate.\n")
 
-            #add in interest
-            self.money = self.money + interest_paid
+    def calculate_loan(self, monthly_payment, months):
+        money_owed = self.principal
 
-            if(self.money - payment < 0):
-                print(f"The last payment is: {self.money}")
-                print(f"You paid the loan in {i+1} months")
+        for month in range(1, months + 1):
+            # Calculate monthly interest
+            interest_paid = money_owed * self.monthly_rate
+
+            # Add interest to balance
+            money_owed += interest_paid
+
+            if money_owed - monthly_payment < 0:
+                print(f"\nFinal payment: ${money_owed:.2f}")
+                print(f"Loan paid off in {month} months!")
                 break
-            
-            #make payments
-            self.money = self.money - payment
 
-            print(f"Paid {payment} of which {interest_paid} was the interest", end=" ")
-            print(f"Now I owe {self.money} dollars")
+            # Subtract payment
+            money_owed -= monthly_payment
 
-a = loan_cal(50000, 3)
-a.showDetails()
-a.loan_status()
+            print(f"Month {month}: Paid ${monthly_payment:.2f} "
+                  f"({interest_paid:.2f} interest), Remaining: ${money_owed:.2f}")
+
+        else:
+            # If loop completes without break
+            print(f"\nAfter {months} months, you still owe ${money_owed:.2f}")
+
+# ---- Example Usage ----
+loan = LoanCalculator(50000, 3)
+loan.show_details()
+loan.calculate_loan(monthly_payment=1000, months=60)
