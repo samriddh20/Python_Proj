@@ -16,6 +16,6 @@ p1 = Person("Sam", 24)
 print(p1.name)
 print(p1.age)
 
-p2 = Person.fromStr("Alberto Del Rio, 27")
+p2 = Person.fromStr("Alberto Del Rio, 29")
 print(p2.name)
 print(p2.age)
